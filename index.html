@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCL_OeCQjVE6oZw85HmCIalSZfRpCSlS-o",
+      authDomain: "agrohydros-f9bd4.firebaseapp.com",
+      projectId: "agrohydros-f9bd4",
+      storageBucket: "agrohydros-f9bd4.appspot.com",
+      messagingSenderId: "713838309214",
+      appId: "1:713838309214:web:68b865c926df7a0272a9cf",
+      measurementId: "G-FDT84LQNJG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.serverTimestamp = serverTimestamp;
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgroHydros | Smart Irrigation</title>
+
+  <style>
+    :root {
+      --bg-color: #f0f4f8;
+      --text-color: #333;
+      --nav-bg: #2c3e50;
+      --card-bg: #34495e;
+      --btn-bg: #e67e22;
+      --btn-hover: #d35400;
+      --highlight: #27ae60;
+      --link-blue: #2980b9;
+      --white: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background: var(--nav-bg);
+      padding: 20px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--white);
+      box-shadow: 0 2px 10px var(--shadow);
+      transition: background 0.3s;
+    }
+
+    header:hover {
+      background: var(--btn-bg);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background: var(--nav-bg);
+      padding: 10px;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border-radius: 5px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    nav a:hover {
+      background: var(--btn-bg);
+      transform: scale(1.05);
+    }
+
+    section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: var(--nav-bg);
+    }
+
+    .feature-box, .pricing-box, .form-container {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px auto;
+      max-width: 600px;
+      box-shadow: 0 4px 12px var(--shadow);
+      color: var(--white);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-box:hover, .pricing-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .pricing-box h2, .feature-box h2 {
+      color: var(--btn-bg);
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 22px;
+      color: var(--highlight);
+      font-weight: bold;
+    }
+
+    .form-container {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 30px 40px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 12px var(--shadow);
+      color: var(--white);
+      box-sizing: border-box;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-color);
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--btn-bg);
+      background: #ecf0f1;
+      color: var(--text-color);
+      transition: border-color 0.3s;
+    }
+
+    input::placeholder {
+      color: var(--btn-bg);
+    }
+
+    input:focus, select:focus {
+      border-color: var(--highlight);
+      outline: none;
+    }
+
+    .custom-submit {
+      background: var(--btn-bg);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .custom-submit:hover {
+      background: var(--btn-hover);
+      transform: scale(1.05);
+    }
+
+    footer {
+      padding: 20px;
+      background: var(--nav-bg);
+      color: var(--white);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    a {
+      color: var(--link-blue);
+      text-decoration: underline;
+    }
+
+    a:hover {
+      color: var(--highlight);
+    }
+  </style>
+</head>
+<body>
+  <header>AgroHydros</header>
+
+  <section id="features">
+    <h2>🌟 Features</h2>
+    <div class="feature-box">
+      <h2>🌱 Soil Monitoring</h2>
+      <p>Real-time soil moisture data from sensors.</p>
+    </div>
+    <div class="feature-box">
+      <h2>📶 Remote Access</h2>
+      <p>Wi-Fi connectivity to control irrigation from your device.</p>
+    </div>
+    <div class="feature-box">
+      <h2>💧 Water Efficiency</h2>
+      <p>AI-powered water-saving logic that adapts to your farm.</p>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <h2>💰 Pricing</h2>
+    <div class="pricing-box">
+      <h2>Base System</h2>
+      <p>For small plant or garden irrigation.</p>
+      <p class="price">Custom Pricing</p>
+    </div>
+    <div class="pricing-box">
+      <h2>Advanced Add-Ons</h2>
+      <p>More sensors, pumps, and full automation support.</p>
+      <p class="price">Tailored Solutions</p>
+    </div>
+  </section>
+
+  <section id="quote">
+    <h2>📩 Request a Quote</h2>
+    <div class="form-container">
+      <div class="form-group">
+        <label for="name"></label>
+        <input type="text" id="name" placeholder="Your Name" required />
+        <label for="email"></label>
+        <input type="email" id="email" placeholder="Your Email" required />
+        <label for="mobile"></label>
+        <input type="tel" id="mobile" placeholder="Your Mobile Number" required pattern="[0-9]{10}" />
+        <label for="requirement"></label>
+        <select id="requirement">
+          <option value="">Select requirement</option>
+          <option value="Base System">Base System</option>
+          <option value="Extra Sensors">Extra Sensors</option>
+          <option value="Full Automation">Full Automation</option>
+        </select>
+      </div>
+      <div class="custom-submit" onclick="requestQuote()">Submit</div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>📞 Contact</h2>
+    <p>Email: <a href="mailto:jihanbhagat@gmail.com">jihanbhagat@gmail.com</a></p>
+    <p>WhatsApp: <a href="https://wa.me/8160819720">+91 8160819720</a></p>
+  </section>
+
+  <footer>
+    &copy; 2025 AgroHydros. All rights reserved.
+  </footer>
+
+  <script>
+    async function requestQuote() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const requirement = document.getElementById("requirement").value;
+
+      if (!name || !email || !mobile || !requirement) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      if (!/^\d{10}$/.test(mobile)) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "quotes"), {
+          name,
+          email,
+          mobile,
+          requirement,
+          submittedAt: serverTimestamp(),
+        });
+
+        alert(`Thank you, ${name}! We’ll contact you shortly.`);
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("mobile").value = "";
+        document.getElementById("requirement").value = "";
+      } catch (e) {
+        console.error("Error:", e);
+        alert("Error submitting form. Please try again.");
+      }
+    }
+  </script>
+</body>
+</html>
