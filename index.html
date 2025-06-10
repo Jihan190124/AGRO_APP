@@ -1,310 +1,596 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+ <html lang="en">
+ 
 
-    const firebaseConfig = {
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>The Agrohydros - Intelligent Irrigation Solution</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<script>
+  const firebaseConfig = {
       apiKey: "AIzaSyCL_OeCQjVE6oZw85HmCIalSZfRpCSlS-o",
       authDomain: "agrohydros-f9bd4.firebaseapp.com",
       projectId: "agrohydros-f9bd4",
-      storageBucket: "agrohydros-f9bd4.appspot.com",
+      storageBucket: "agrohydros-f9bd4.firebasestorage.app",
       messagingSenderId: "713838309214",
       appId: "1:713838309214:web:68b865c926df7a0272a9cf",
       measurementId: "G-FDT84LQNJG"
     };
+</script>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    window.db = db;
-    window.collection = collection;
-    window.addDoc = addDoc;
-    window.serverTimestamp = serverTimestamp;
-  </script>
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AgroHydros | Smart Irrigation</title>
 
   <style>
-    :root {
-      --bg-color: #f0f4f8;
-      --text-color: #333;
-      --nav-bg: #2c3e50;
-      --card-bg: #34495e;
-      --btn-bg: #e67e22;
-      --btn-hover: #d35400;
-      --highlight: #27ae60;
-      --link-blue: #2980b9;
-      --white: #ffffff;
-      --shadow: rgba(0, 0, 0, 0.2);
-    }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap');
+ 
 
-    body {
-      background: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      scroll-behavior: smooth;
-    }
+  :root {
+  /* Base Colors */
+  --color-bg: #ffffff;
+  --color-text: #6b7280;
+  --color-heading: #111827;
+ 
 
-    header {
-      background: var(--nav-bg);
-      padding: 20px;
-      text-align: center;
-      font-size: 32px;
-      font-weight: bold;
-      color: var(--white);
-      box-shadow: 0 2px 10px var(--shadow);
-      transition: background 0.3s;
-    }
+  /* Primary Theme */
+  --color-accent: #0d9488;
+  --color-accent-light: #ccfbf1;
+ 
 
-    header:hover {
-      background: var(--btn-bg);
-    }
+  /* Additional Accents */
+  --color-orange: #f97316;
+  --color-orange-light: #ffedd5;
+  --color-blue: #2563eb;
+  --color-blue-light: #dbeafe;
+  --color-lime: #84cc16;
+  --color-lime-light: #ecfccb;
+ 
 
-    nav {
-      display: flex;
-      justify-content: center;
-      background: var(--nav-bg);
-      padding: 10px;
-    }
+  /* Button Colors */
+  --color-btn-bg: var(--color-orange);
+  --color-btn-bg-hover: #ea580c;
+  --color-btn-text: #ffffff;
+ 
 
-    nav a {
-      color: var(--white);
-      text-decoration: none;
-      padding: 10px 20px;
-      margin: 0 10px;
-      border-radius: 5px;
-      transition: background 0.3s, transform 0.2s;
-    }
+  /* Navigation */
+  --color-nav-link: var(--color-blue);
+  --color-nav-link-hover: #1d4ed8;
+ 
 
-    nav a:hover {
-      background: var(--btn-bg);
-      transform: scale(1.05);
-    }
+  /* Shadows & Borders */
+  --color-shadow-light: rgba(13, 148, 136, 0.12);
+  --color-shadow-subtle: rgba(0, 0, 0, 0.05);
+  --color-border: #e5e7eb;
+ 
 
-    section {
-      padding: 60px 20px;
-      text-align: center;
-    }
+  --border-radius: 0.75rem;
+  --max-width: 1200px;
+  --transition: 0.3s ease;
+  }
+ 
 
-    h2 {
-      margin-bottom: 20px;
-      font-size: 28px;
-      color: var(--nav-bg);
-    }
+  body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 18px;
+  line-height: 1.6;
+  }
+ 
 
-    .feature-box, .pricing-box, .form-container {
-      background: var(--card-bg);
-      border-radius: 15px;
-      padding: 25px;
-      margin: 20px auto;
-      max-width: 600px;
-      box-shadow: 0 4px 12px var(--shadow);
-      color: var(--white);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
+  a {
+  color: var(--color-nav-link);
+  text-decoration: none;
+  transition: color var(--transition);
+  }
+ 
 
-    .feature-box:hover, .pricing-box:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px var(--shadow);
-    }
+  a:hover,
+  a:focus {
+  color: var(--color-nav-link-hover);
+  }
+ 
 
-    .pricing-box h2, .feature-box h2 {
-      color: var(--btn-bg);
-      margin-bottom: 10px;
-    }
+  header {
+  position: sticky;
+  top: 0;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 1000;
+  box-shadow: 0 2px 8px var(--color-shadow-subtle);
+  }
+ 
 
-    .price {
-      font-size: 22px;
-      color: var(--highlight);
-      font-weight: bold;
-    }
+  .nav-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  }
+ 
 
-    .form-container {
-      background: var(--card-bg);
-      border-radius: 15px;
-      padding: 30px 40px;
-      margin: 20px auto;
-      width: 90%;
-      max-width: 600px;
-      box-shadow: 0 4px 12px var(--shadow);
-      color: var(--white);
-      box-sizing: border-box;
-    }
+  .logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--color-heading);
+  }
+ 
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+  nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  }
+ 
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--text-color);
-      font-weight: bold;
-    }
+  nav a {
+  font-weight: 600;
+  font-size: 1rem;
+  position: relative;
+  }
+ 
 
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--btn-bg);
-      background: #ecf0f1;
-      color: var(--text-color);
-      transition: border-color 0.3s;
-    }
+  nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: var(--color-blue);
+  transition: width var(--transition);
+  border-radius: 2px;
+  }
+ 
 
-    input::placeholder {
-      color: var(--btn-bg);
-    }
+  nav a:hover::after,
+  nav a:focus::after {
+  width: 100%;
+  }
+ 
 
-    input:focus, select:focus {
-      border-color: var(--highlight);
-      outline: none;
-    }
+  .btn-primary {
+  background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-blue) 100%);
+  color: var(--color-btn-text);
+  font-weight: 700;
+  padding: 0.6rem 1.75rem;
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition);
+  font-size: 1rem;
+  box-shadow: 0 4px 14px var(--color-shadow-light);
+  }
+ 
 
-    .custom-submit {
-      background: var(--btn-bg);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 16px;
-      margin-top: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
+  .btn-primary:hover,
+  .btn-primary:focus {
+  background: linear-gradient(135deg, var(--color-btn-bg-hover) 0%, #1e40af 100%);
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
+  }
+ 
 
-    .custom-submit:hover {
-      background: var(--btn-hover);
-      transform: scale(1.05);
-    }
+  main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  }
+ 
 
-    footer {
-      padding: 20px;
-      background: var(--nav-bg);
-      color: var(--white);
-      text-align: center;
-      font-size: 14px;
-    }
+  section {
+  padding: 6rem 0;
+  }
+ 
 
-    a {
-      color: var(--link-blue);
-      text-decoration: underline;
-    }
+  .hero {
+  text-align: center;
+  background: linear-gradient(to bottom right, #ecfeff, #fefce8);
+  border-radius: var(--border-radius);
+  box-shadow: 0 12px 30px var(--color-shadow-light);
+  margin-bottom: 4rem;
+  padding: 8rem 1rem;
+  }
+ 
 
-    a:hover {
-      color: var(--highlight);
-    }
+  .hero h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--color-orange);
+  margin-bottom: 1rem;
+  }
+ 
+
+  .hero p {
+  font-size: 1.4rem;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  color: var(--color-blue);
+  }
+ 
+
+  .features-grid {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+ 
+
+  .feature-card {
+  background-color: var(--color-lime-light);
+  border-left: 6px solid var(--color-lime);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: 0 6px 15px var(--color-shadow-light);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+ 
+
+  .feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(132, 204, 22, 0.3);
+  }
+ 
+
+  .feature-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-orange);
+  margin-bottom: 0.75rem;
+  }
+ 
+
+  .feature-desc {
+  color: #4b5563;
+  }
+ 
+
+  footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #94a3b8;
+  padding: 2rem 1rem;
+  border-top: 1px solid var(--color-border);
+  margin-top: 4rem;
+  }
+ 
+
+  :target::before {
+  content: "";
+  display: block;
+  height: 80px;
+  margin-top: -80px;
+  visibility: hidden;
+  }
+ 
+
+  @media (max-width: 768px) {
+  .hero h1 {
+  font-size: 2.75rem;
+  }
+ 
+
+  .hero p {
+  font-size: 1.1rem;
+  }
+ 
+
+  nav {
+  gap: 1rem;
+  }
+ 
+
+  .nav-container {
+  padding: 1rem;
+  }
+  }
   </style>
-</head>
-<body>
-  <header>AgroHydros</header>
+ </head>
+ 
 
-  <section id="features">
-    <h2>🌟 Features</h2>
-    <div class="feature-box">
-      <h2>🌱 Soil Monitoring</h2>
-      <p>Real-time soil moisture data from sensors.</p>
-    </div>
-    <div class="feature-box">
-      <h2>📶 Remote Access</h2>
-      <p>Wi-Fi connectivity to control irrigation from your device.</p>
-    </div>
-    <div class="feature-box">
-      <h2>💧 Water Efficiency</h2>
-      <p>AI-powered water-saving logic that adapts to your farm.</p>
-    </div>
+ <body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+  <a class="navbar-brand" href="#">THE AGROHYDROS</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+  aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav ms-auto">
+  <li class="nav-item">
+  <a class="nav-link" href="#hero">Home</a>
+  </li>
+  <li class="nav-item">
+  <a class="nav-link" href="#features">Features</a>
+  </li>
+  <li class="nav-item">
+  <a class="nav-link" href="#quote-section">Quote</a>
+</li>
+
+  <li class="nav-item">
+  <a class="nav-link" href="#contact">Contact</a>
+  </li>
+  </ul>
+  
+  </div>
+  </div>
+  </nav>
+  </header>
+ 
+
+  <main>
+  <section id="hero" class="hero py-5">
+  <div class="container">
+  <div class="row">
+  <div class="col-md-12 text-center">
+  <h1>Intelligent Irrigation for a Sustainable Future</h1>
+  <p>Optimize water usage and improve plant health with real-time soil moisture monitoring and smart
+  automation.</p>
+  </div>
+  </div>
+  </div>
+  </section>
+ 
+
+  <section id="features" class="py-5">
+  <div class="container">
+  <h2 class="text-center fw-bold mb-4"
+  style="font-size:2.5rem; color: var(--color-blue);">Key Features</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+  <!-- Feature Cards -->
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Intelligent Irrigation</h3>
+  <p class="feature-desc">Precise watering based on real-time soil moisture to prevent over- and
+  under-watering, promoting optimal plant growth.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Advanced Mobile Application</h3>
+  <p class="feature-desc">Real-time notifications and analytics offering full visibility of your
+  irrigation system to enhance control and plant care.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Sustainability & Environmental Impact</h3>
+  <p class="feature-desc">Reduces water and energy usage with long-lasting, low-power sensors for
+  an eco-friendly irrigation solution.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Customization & Scalability</h3>
+  <p class="feature-desc">Tailor soil moisture thresholds and expand easily for small gardens to
+  large farms or commercial landscapes.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Smart Home Integration</h3>
+  <p class="feature-desc">Integrates with Google Home, Amazon Alexa, and adapts irrigation
+  dynamically with machine learning and weather forecasts.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Real-Time Alerts & Data Insights</h3>
+  <p class="feature-desc">Immediate alerts for system status, watering events, plus detailed
+  analytics on water usage and plant health.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Cost-Effective & High Value</h3>
+  <p class="feature-desc">Delivering advanced functionality at competitive pricing with long-term
+  savings from automation and reduced labor.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Easy Installation & Support</h3>
+  <p class="feature-desc">Quick setup requiring minimal expertise with 24/7 customer support and
+  detailed guides for smooth operation.</p>
+  </div>
+  </div>
+  <div class="col">
+  <div class="feature-card">
+  <h3 class="feature-title">Long-Term Agricultural Impact</h3>
+  <p class="feature-desc">Boost crop yields and promote environmentally responsible agriculture
+  with sustainable water management.</p>
+  </div>
+  </div>
+  </div>
+  </div>
   </section>
 
-  <section id="pricing">
-    <h2>💰 Pricing</h2>
-    <div class="pricing-box">
-      <h2>Base System</h2>
-      <p>For small plant or garden irrigation.</p>
-      <p class="price">Custom Pricing</p>
-    </div>
-    <div class="pricing-box">
-      <h2>Advanced Add-Ons</h2>
-      <p>More sensors, pumps, and full automation support.</p>
-      <p class="price">Tailored Solutions</p>
-    </div>
-  </section>
 
-  <section id="quote">
-    <h2>📩 Request a Quote</h2>
-    <div class="form-container">
-      <div class="form-group">
-        <label for="name"></label>
-        <input type="text" id="name" placeholder="Your Name" required />
-        <label for="email"></label>
-        <input type="email" id="email" placeholder="Your Email" required />
-        <label for="mobile"></label>
-        <input type="tel" id="mobile" placeholder="Your Mobile Number" required pattern="[0-9]{10}" />
-        <label for="requirement"></label>
-        <select id="requirement">
-          <option value="">Select requirement</option>
-          <option value="Base System">Base System</option>
-          <option value="Extra Sensors">Extra Sensors</option>
-          <option value="Full Automation">Full Automation</option>
-        </select>
+
+
+
+
+
+
+
+
+
+  <section id="quote-section" style="background:#fdfcf7; padding:3rem 1rem; border-top:2px solid #f97316;">
+  <div class="container" style="max-width: 600px; margin: auto;">
+    <h3 style="text-align:center; font-size:1.75rem; color:#f97316; font-weight:700;">📩 Request a Custom Quote</h3>
+    <p style="text-align:center; color:#6b7280; margin-bottom:2rem;">Tell us your needs, and we’ll provide the best pricing for you!</p>
+
+    <div class="quote-form" style="display:flex; flex-direction:column; gap:1rem;">
+      <input type="text" id="quoteName" placeholder="Your Name" required
+             style="padding:0.75rem; border-radius:0.5rem; border:1px solid #d1d5db;">
+      <input type="email" id="quoteEmail" placeholder="Your Email" required
+             style="padding:0.75rem; border-radius:0.5rem; border:1px solid #d1d5db;">
+      <input type="tel" id="quoteMobile" placeholder="Your Mobile Number" required
+             pattern="[0-9]{10}" title="Enter a 10-digit mobile number"
+             style="padding:0.75rem; border-radius:0.5rem; border:1px solid #d1d5db;">
+      <select id="quoteRequirement" required
+              style="padding:0.75rem; border-radius:0.5rem; border:1px solid #d1d5db;">
+        <option value="">Select Your Requirement</option>
+        <option value="Base System">Base System</option>
+        <option value="Extra Sensors & Pumps">Extra Sensors & Pumps</option>
+        <option value="Full Automation">Full Automation</option>
+      </select>
+      <button onclick="requestQuote()" style="background:linear-gradient(135deg,#f97316,#2563eb);
+              color:white; padding:0.75rem; border:none; border-radius:0.5rem; font-weight:600;">
+        Submit Request
+      </button>
+    </div>
+  </div>
+</section>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const app = initializeApp({
+    apiKey: "AIzaSyCL_OeCQjVE6oZw85HmCIalSZfRpCSlS-o",
+    authDomain: "agrohydros-f9bd4.firebaseapp.com",
+    projectId: "agrohydros-f9bd4",
+    storageBucket: "agrohydros-f9bd4.appspot.com",
+    messagingSenderId: "713838309214",
+    appId: "1:713838309214:web:68b865c926df7a0272a9cf",
+    measurementId: "G-FDT84LQNJG"
+  });
+
+  const db = getFirestore(app);
+
+  window.requestQuote = async () => {
+    const name = document.getElementById('quoteName').value.trim();
+    const email = document.getElementById('quoteEmail').value.trim();
+    const mobile = document.getElementById('quoteMobile').value.trim();
+    const requirement = document.getElementById('quoteRequirement').value;
+
+    if (!name || !email || !mobile || !requirement) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "order_applications"), {
+        name,
+        email,
+        mobile,
+        requirement,
+        timestamp: serverTimestamp()
+      });
+
+      alert("✅ Quote request submitted successfully!");
+
+      // Clear form
+      document.getElementById("quoteName").value = "";
+      document.getElementById("quoteEmail").value = "";
+      document.getElementById("quoteMobile").value = "";
+      document.getElementById("quoteRequirement").value = "";
+
+    } catch (error) {
+      console.error("Error submitting quote request:", error);
+      alert("❌ Something went wrong. Please try again later.");
+    }
+  };
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="contact" style="padding: 4rem 1rem; background: #fdfcf7; border-top: 2px solid #f97316;">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4"
+        style="font-size:2.25rem; color:#f97316; font-family:'Poppins', sans-serif;">
+      Get Started with Agrohydros
+    </h2>
+    <p class="text-center mx-auto mb-4"
+       style="max-width:480px; color:#6b7280; font-size:1.1rem;">
+      Contact us to learn more or request a demo tailored to your irrigation needs.
+    </p>
+
+    <form id="contactForm" style="max-width:600px; margin: 0 auto;">
+      <div class="mb-3">
+        <label for="name" class="form-label" style="font-weight:600; color:#111827;">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Your Name"
+               required style="border-radius: 0.5rem; border: 1px solid #e5e7eb; padding: 0.75rem;">
       </div>
-      <div class="custom-submit" onclick="requestQuote()">Submit</div>
-    </div>
-  </section>
 
-  <section id="contact">
-    <h2>📞 Contact</h2>
-    <p>Email: <a href="mailto:jihanbhagat@gmail.com">jihanbhagat@gmail.com</a></p>
-    <p>WhatsApp: <a href="https://wa.me/8160819720">+91 8160819720</a></p>
-  </section>
+      <div class="mb-3">
+        <label for="email" class="form-label" style="font-weight:600; color:#111827;">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Your Email"
+               required style="border-radius: 0.5rem; border: 1px solid #e5e7eb; padding: 0.75rem;">
+      </div>
 
-  <footer>
-    &copy; 2025 AgroHydros. All rights reserved.
-  </footer>
+      <div class="mb-3">
+        <label for="phone" class="form-label" style="font-weight:600; color:#111827;">Phone Number</label>
+        <input type="tel" class="form-control" id="phone" placeholder="Your Phone Number"
+               style="border-radius: 0.5rem; border: 1px solid #e5e7eb; padding: 0.75rem;">
+      </div>
+
+      <div class="mb-3">
+        <label for="message" class="form-label" style="font-weight:600; color:#111827;">Message</label>
+        <textarea class="form-control" id="message" rows="4" placeholder="Your Message"
+                  required style="border-radius: 0.5rem; border: 1px solid #e5e7eb; padding: 0.75rem;"></textarea>
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary"
+                style="background: linear-gradient(135deg, #f97316 0%, #2563eb 100%);
+                       color: white; padding: 0.6rem 2rem; font-weight:700;
+                       border-radius: 0.75rem; border: none;
+                       box-shadow: 0 4px 14px rgba(13, 148, 136, 0.12);">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+  <!-- Bootstrap JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ 
 
   <script>
-    async function requestQuote() {
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const mobile = document.getElementById("mobile").value.trim();
-      const requirement = document.getElementById("requirement").value;
+  document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      if (!name || !email || !mobile || !requirement) {
-        alert("Please fill all fields.");
-        return;
-      }
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const message = document.getElementById('message').value.trim();
 
-      if (!/^\d{10}$/.test(mobile)) {
-        alert("Please enter a valid 10-digit mobile number.");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "quotes"), {
-          name,
-          email,
-          mobile,
-          requirement,
-          submittedAt: serverTimestamp(),
-        });
-
-        alert(`Thank you, ${name}! We’ll contact you shortly.`);
-        document.getElementById("name").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("mobile").value = "";
-        document.getElementById("requirement").value = "";
-      } catch (e) {
-        console.error("Error:", e);
-        alert("Error submitting form. Please try again.");
-      }
-    }
-  </script>
-</body>
-</html>
+    db.collection('contactSubmissions').add({
+      name: name,
+      email: email,
+      phone: phone,
+      message: message,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+      alert("✅ Message sent successfully!");
+      document.getElementById('contactForm').reset();
+    })
+    .catch((error) => {
+      alert("❌ Failed to send message: " + error.message);
+    });
+  });
+</script>
+<footer class="text-center py-3">
+  &copy; 2025 The Agrohydros. All rights reserved.
+  </footer>
+ </body>
+ </html>
